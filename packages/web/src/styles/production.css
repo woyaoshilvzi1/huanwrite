@@ -1,0 +1,64 @@
+.meta-editor,
+.plan-editor {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.gate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.gate-item {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0;
+}
+
+.gate-item input {
+  width: 100%;
+}
+
+.gate-item label:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gate-item label:first-child input {
+  width: auto;
+}
+
+.structure-card-list {
+  display: grid;
+  gap: 10px;
+}
+
+.structure-card-editor {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
+.structure-card-editor legend {
+  padding: 0 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

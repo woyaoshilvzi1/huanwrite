@@ -1,0 +1,43 @@
+{
+  "name": "huanwrite",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local novel production and submission workbench.",
+  "type": "module",
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "tsc -b packages/shared packages/core packages/server packages/cli packages/web",
+    "typecheck": "tsc -p tsconfig.typecheck.json --pretty false",
+    "test": "vitest run",
+    "cleanup:e2e": "node scripts/cleanup-e2e.mjs",
+    "test:e2e": "node scripts/cleanup-e2e.mjs && powershell -NoProfile -Command \"npm.cmd exec playwright test -- --headed; $code=$LASTEXITCODE; npm.cmd run cleanup:e2e; exit $code\"",
+    "audit:smells": "node scripts/audit-smells.mjs",
+    "verify": "npm run clean && npm run typecheck && npm run test",
+    "verify:e2e": "npm run clean && npm run typecheck && npm run test:e2e",
+    "dev": "tsx --tsconfig tsconfig.base.json packages/server/src/main.ts",
+    "dev:web": "vite --config packages/web/vite.config.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "@hono/zod-validator": "^0.8.0",
+    "dotenv": "^17.4.2",
+    "echarts": "^6.0.0",
+    "hono": "^4.6.17",
+    "ws": "^8.20.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.8"
+  }
+}

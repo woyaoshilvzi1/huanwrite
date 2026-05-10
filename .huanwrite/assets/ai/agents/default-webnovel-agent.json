@@ -1,0 +1,6 @@
+{
+  "id": "default-webnovel-agent",
+  "displayName": "中文网文写作",
+  "shortDescription": "根据一句简介规划、起稿、续写、改写和审稿中文网文",
+  "defaultPrompt": "根据目标小说简介，先做选材和故事引擎判断，再进入规划、开头、黄金三章、章纲或正文候选；默认参考正式写作资产，避免空泛和AI味。"
+}

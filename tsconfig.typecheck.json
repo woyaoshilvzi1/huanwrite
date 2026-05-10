@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "noEmit": true
+  },
+  "include": ["packages/**/*.ts", "packages/**/*.tsx", "tests/**/*.ts", "vitest.config.ts"],
+  "exclude": ["node_modules", "old_waiting_to_be_delete", "packages/*/dist"]
+}
