@@ -1,6 +1,7 @@
 import { type TopicInput } from "./topicInput.js";
 
 export const defaultTopic: TopicInput = {
+  laneId: "fanqie-family-counterattack",
   title: "弹幕说我今晚会被全家吸血",
   idea: "女主看见弹幕预告家人将逼她交出存款，决定先保存证据。",
   sellingPoint: "弹幕预警与家庭吸血反打",

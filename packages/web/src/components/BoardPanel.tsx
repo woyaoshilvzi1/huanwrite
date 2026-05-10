@@ -72,6 +72,11 @@ export function BoardPanel({
                   onDragEnd={() => setDraggingId("")}
                 >
                   <strong>{item.title}</strong>
+                  {item.workbench.laneProfile ? (
+                    <p>
+                      {item.workbench.laneProfile.laneTitle} · {item.workbench.laneProfile.track}
+                    </p>
+                  ) : null}
                   <p>负责人：{item.workbench.owner || "未填写"}</p>
                   <p>{item.workbench.notes || "暂无备注"}</p>
                   <label>

@@ -1,6 +1,7 @@
 import {
   type ActionAvailability,
   type Candidate,
+  type CreativeLane,
   type Manuscript,
   type ManuscriptWorkbenchMeta,
   type Plan,
@@ -10,10 +11,12 @@ import {
   type Topic,
   type WorkbenchActionId
 } from "@huanwrite/shared";
+import { AssetCatalog } from "../assets/assetCatalog.js";
 import { FileProjectStore } from "../repositories/projectStore.js";
 import { buildActionAvailability } from "./actionAvailability.js";
 
 export interface WorkflowDashboard {
+  creativeLanes: CreativeLane[];
   topics: DashboardTopic[];
   plans: Plan[];
   planDetails: PlanWorkbenchDetail[];
@@ -39,6 +42,7 @@ export class DashboardService {
     const reviews = this.store.reviews.list();
     const submissions = this.store.submissions.list();
     return {
+      creativeLanes: new AssetCatalog(this.store.root).creativeLanes.list(),
       topics: this.store.topics.list().map((topic) => ({
         ...topic,
         nextAction: nextTopicAction(topic.status)

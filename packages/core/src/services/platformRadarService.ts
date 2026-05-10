@@ -20,6 +20,9 @@ export interface PlatformRadarEvidence {
 export interface PlatformRadarLaneMatch {
   manuscriptId: string;
   title: string;
+  laneTitle: string;
+  track: string;
+  radarSignals: string[];
   targetPlatform: string;
   readiness: number;
   nextAction: string;
@@ -36,8 +39,11 @@ export class PlatformRadarService {
       return {
         manuscriptId: manuscript.id,
         title: manuscript.title,
+        laneTitle: manuscript.workbench.laneProfile?.laneTitle ?? "未归属稿线",
+        track: manuscript.workbench.laneProfile?.track ?? "未配置生产方向",
+        radarSignals: manuscript.workbench.laneProfile?.radarSignals ?? [],
         targetPlatform: plan?.targetPlatform ?? "未指定平台",
-        readiness: manuscript.charCount > 0 ? (hasSubmission ? 90 : 60) : 20,
+        readiness: manuscript.charCount > 0 ? (hasSubmission ? 90 : radarFit(manuscript.workbench.laneProfile?.radarSignals ?? [])) : 20,
         nextAction: hasSubmission ? "投前规则复核" : manuscript.charCount > 0 ? "生成投稿包" : "补正文内容"
       };
     });
@@ -51,6 +57,13 @@ export class PlatformRadarService {
       recommendations: ["保留公开来源截图和链接", "投稿前重新读取平台规则", "不要把无法确认的信息写成事实"]
     };
   }
+}
+
+function radarFit(signals: string[]): number {
+  if (signals.some((item) => item.includes("短剧") || item.includes("IP"))) return 76;
+  if (signals.some((item) => item.includes("短故事") || item.includes("女频"))) return 68;
+  if (signals.some((item) => item.includes("长篇") || item.includes("升级"))) return 58;
+  return 60;
 }
 
 function buildEvidence(dashboard: WorkflowDashboard): PlatformRadarEvidence[] {

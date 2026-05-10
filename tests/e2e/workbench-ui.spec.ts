@@ -27,6 +27,7 @@ test("React workbench supports the full production flow", async ({ page }) => {
   await expectApiSurface(page);
 
   await createNovelFromUi(page, title);
+  await expectLaneDrivenTopic(page, title);
   await editPlanningAndWorkbenchMeta(page, title);
   await runProductionChain(page, title);
   const dashboard = await readDashboard(page);
@@ -37,18 +38,30 @@ test("React workbench supports the full production flow", async ({ page }) => {
   await expectCharts(page);
   await expect(page.getByLabel("平台证据")).toContainText("当前工作台投稿包");
   await expect(page.getByLabel("稿线匹配")).toContainText(title);
+  await expect(page.getByLabel("稿线匹配")).toContainText("都市婚恋清算");
   await expectPlanningActions(page, title);
 });
 
 async function createNovelFromUi(page: Page, title: string): Promise<void> {
+  await page.getByLabel("创作稿线").selectOption("fanqie-urban-marriage");
+  await expect(page.getByLabel("稿线要求")).toContainText("都市婚恋清算");
+  await expect(page.getByLabel("稿线要求")).toContainText("热搜");
   await page.getByLabel("题材标题").fill(title);
-  await page.getByRole("button", { name: "创建题材" }).click();
+  await page.getByRole("button", { name: "按稿线创建题材" }).click();
   await expectNotice(page, "题材已创建");
   const topicItem = page.getByRole("listitem").filter({ hasText: title }).filter({ hasText: "状态：idea" });
   await topicItem.getByRole("button", { name: "选中" }).click();
   await expectNotice(page, "题材已选中");
   await page.getByRole("listitem").filter({ hasText: title }).filter({ hasText: "状态：selected" }).getByRole("button", { name: "创建规划" }).click();
   await expectNotice(page, "规划已创建");
+}
+
+async function expectLaneDrivenTopic(page: Page, title: string): Promise<void> {
+  const dashboard = await readDashboard(page);
+  expect(dashboard.creativeLanes.length).toBeGreaterThanOrEqual(6);
+  const topic = dashboard.topics.find((item) => item.title === title);
+  expect(topic?.laneProfile?.laneId).toBe("fanqie-urban-marriage");
+  expect(topic?.laneProfile?.creationFocus).toContain("婚恋关系要有明确损失账本");
 }
 
 async function editPlanningAndWorkbenchMeta(page: Page, title: string): Promise<void> {
@@ -90,9 +103,9 @@ async function editPlanningAndWorkbenchMeta(page: Page, title: string): Promise<
   const manuscriptItem = page.getByLabel(`正文 ${manuscript.id}`);
   await manuscriptItem.getByRole("textbox", { name: `负责人 ${title} 正文`, exact: true }).fill("E2E 编辑");
   await manuscriptItem.getByRole("textbox", { name: `备注 ${title} 正文`, exact: true }).fill("真实浏览器操作写入的备注");
-  await manuscriptItem.getByRole("checkbox", { name: `规划已确认 ${title} 正文`, exact: true }).check();
-  await manuscriptItem.getByRole("textbox", { name: `规划已确认 负责人 ${title} 正文`, exact: true }).fill("E2E 主编");
-  await manuscriptItem.getByRole("textbox", { name: `规划已确认 备注 ${title} 正文`, exact: true }).fill("确认规划质量门已经人工复核");
+  await manuscriptItem.getByRole("checkbox", { name: `冲突绑定钱/身份/资源/关系/舆论 ${title} 正文`, exact: true }).check();
+  await manuscriptItem.getByRole("textbox", { name: `冲突绑定钱/身份/资源/关系/舆论 负责人 ${title} 正文`, exact: true }).fill("E2E 主编");
+  await manuscriptItem.getByRole("textbox", { name: `冲突绑定钱/身份/资源/关系/舆论 备注 ${title} 正文`, exact: true }).fill("稿线质量门已经人工复核");
   await manuscriptItem.getByRole("button", { name: "保存看板信息" }).click();
   await expectNotice(page, "看板信息已保存");
 
@@ -102,13 +115,15 @@ async function editPlanningAndWorkbenchMeta(page: Page, title: string): Promise<
   await expect(page.getByLabel("状态列 drafting").filter({ hasText: title })).toBeVisible();
   const dashboard = await readDashboard(page);
   const savedManuscript = findManuscriptByTopicTitle(dashboard.manuscripts, title);
+  expect(savedManuscript.workbench.laneProfile?.laneId).toBe("fanqie-urban-marriage");
+  expect(savedManuscript.workbench.qualityGates.map((gate) => gate.label)).toContain("冲突绑定钱/身份/资源/关系/舆论");
   expect(savedManuscript.workbench.laneStatus).toBe("drafting");
   expect(savedManuscript.workbench.owner).toBe("E2E 编辑");
   expect(savedManuscript.workbench.notes).toContain("真实浏览器操作");
-  const planningGate = savedManuscript.workbench.qualityGates.find((gate) => gate.id === "planning-confirmed");
+  const planningGate = savedManuscript.workbench.qualityGates.find((gate) => gate.label === "冲突绑定钱/身份/资源/关系/舆论");
   expect(planningGate?.passed).toBe(true);
   expect(planningGate?.owner).toBe("E2E 主编");
-  expect(planningGate?.note).toContain("人工复核");
+  expect(planningGate?.note).toContain("稿线质量门");
 }
 
 async function expectStructuredPlanSaved(page: Page, title: string): Promise<void> {
@@ -126,6 +141,7 @@ async function expectStructuredPlanSaved(page: Page, title: string): Promise<voi
   expect(plan.structureCards[2]?.oocRisk).toContain("凭空知道");
   expect(plan.bannedPhrases).toContain("眼眶瞬间红了");
   expect(plan.fatigueWords).toContain("沉默");
+  expect(plan.styleRules).toContain("稿线要求：婚恋关系要有明确损失账本");
   const detail = dashboard.planDetails.find((item) => item.planId === plan.id);
   expect(detail?.craftCards).toContain("每章结尾留下新威胁");
 }

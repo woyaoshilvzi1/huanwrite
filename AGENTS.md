@@ -1,96 +1,46 @@
-# Huanwrite Agent Operating Manual
+# Huanwrite Agent Map
 
 Always read and write text files as UTF-8 unless a file format explicitly requires something else.
 
-Use Simplified Chinese when replying to the project owner.
+Reply to the project owner in Simplified Chinese.
 
-This project has no tolerance for unfinished surfaces. A feature is complete only when it has real state, real UI, real API behavior, real artifacts where applicable, and tests that verify those facts.
+This file is the project map and operating law. Keep detailed engineering, testing, and user-preference rules in `docs/`.
 
-## Required Reading
+## Read First
 
-- `docs/user-preferences.md`
-- `docs/core.md`
-- `docs/engineering-rules.md`
-- `docs/testing-rules.md`
-- `spec/README.md`
+- `docs/user-preferences.md`: owner-facing preferences and unacceptable behaviors.
+- `docs/core.md`: product purpose, architecture, and source-of-truth map.
+- `docs/engineering-rules.md`: maintainability audit rules.
+- `docs/testing-rules.md`: real-test standards and verification commands.
+- `spec/README.md`: current product and engineering specifications.
 
-## Current Architecture
+## Iron Rules
 
-- `packages/shared`: shared contracts, statuses, and workbench action/view definitions.
-- `packages/core`: business services, SQLite repositories, asset readers, AI provider configuration, action execution, health, eval baseline, and observability.
+- Do not run `git push`, publish packages, upload releases, or otherwise upload project state unless the owner explicitly asks for that exact upload/push action in the current conversation.
+- Do not claim completion until code, documentation, and tests describe the same current behavior and the required verification has passed.
+- Do not write fake tests. Tests must exercise real API behavior, real UI behavior, real persisted state, or real generated artifacts.
+- Do not create empty shells. User-visible features need real state, real behavior, real artifacts where applicable, and real tests.
+- Do not keep compatibility layers, fallback readers, dual writes, historical aliases, or old residue.
+- Do not hide design problems with `any`, `unknown as`, `as {}`, fake generics, brittle selectors, or order guesses.
+- Do not hardcode creative content, platform rules, word banks, writing templates, or quality rules inside services or UI. Maintain them under `.huanwrite/assets` or explicit configuration.
+
+## Project Map
+
+- `packages/shared`: contracts, statuses, workbench action/view definitions, and shared schemas.
+- `packages/core`: business services, SQLite repositories, asset readers, AI provider configuration, action execution, observability, health, and eval baseline.
 - `packages/server`: Hono API routes, OpenAPI document, browser API client, and job WebSocket.
-- `packages/web`: React/Vite workbench UI. UI code renders state and calls API; it does not own business rules.
+- `packages/web`: React/Vite workbench UI. UI renders state and triggers user intent; it does not own business rules.
 - `packages/cli`: command-line entry.
 - `tests`: all tests. End-to-end tests live in `tests/e2e`.
-- `.huanwrite/assets`: human-maintained writing assets, templates, skills, corpus, and rules.
+- `.huanwrite/assets`: human-maintained writing assets, creative lanes, templates, skills, corpus, and rules.
 - `.huanwrite/huanwrite.sqlite`: machine-read business state.
 - `.huanwrite/.env`: local secret configuration, ignored by git.
 
-## Non-Negotiable Rules
-
-- Do not keep compatibility layers, fallback readers, dual writes, or historical aliases.
-- Do not use number-suffixed prompt keys or release-stage labels for current functionality.
-- Do not use `any`, `unknown as`, `as {}`, fake generic types, or assertions that hide design problems.
-- Do not write hardcoded creative content, word banks, platform rules, or writing templates in services. Put maintainable content in `.huanwrite/assets` or explicit configuration.
-- Do not create empty shells. Buttons, routes, panels, reports, and actions must change real state or expose real data.
-- Do not put tests under packages. Keep tests under root `tests/`.
-- Do not commit build output, caches, package-level `dist`, or `*.tsbuildinfo`.
-- Do not use fragile E2E selectors such as `.first()`, `.last()`, or order guesses. Use accessible names, stable IDs, and API facts.
-- Do not poll in the frontend for background jobs. Use `/ws/jobs`.
-
-## File Responsibility
-
-One file owns one responsibility.
-
-- Contracts are not services.
-- Services are not UI.
-- API routes are not business logic.
-- UI components are not data repositories.
-- Chart data builders are not chart renderers.
-- Storage modules own paths and persistence details.
-
-Centralize what must be centralized: action IDs, status values, path rules, provider config, schema validation, and storage boundaries.
-
-Separate what must be separate: rendering, controller hooks, service logic, repositories, route registration, fixtures, and E2E helpers.
-
-## Storage
-
-- Machine-read business state uses structured SQLite tables.
-- Human-maintained assets use Markdown, JSON, CSV, YAML, images, or text files under `.huanwrite/assets`.
-- Runtime action outputs are Markdown plus trace sidecars under `.huanwrite/runs/actions`.
-- Secrets live only in `.huanwrite/.env`.
-
-## Workbench Surface
-
-The workbench must expose and keep verified:
-
-- Topic creation and selection.
-- Structured planning with chapter cards, relationship rows, voice/style fingerprints, banned phrases, fatigue words, and craft cards.
-- Planning actions: write plan, replan, polish plan, brainstorm.
-- Planning confirmation gates that block downstream writing when incomplete.
-- Multi-lane board with search, filtering, quality gates, owner/notes, and drag status changes.
-- Draft editing and empty overwrite protection.
-- Candidate generation, review, repair, merge brief, merge, submission package, drama adaptation, platform radar, daily platform radar, and state audit.
-- Background jobs with progress, logs, status, stop requests, and WebSocket updates.
-- Action availability reasons.
-- Run output viewer, trace sidecar, prompt hash, prompt registry key, model metadata, usage, harness, and eval baseline.
-- Reference context from formal assets.
-- Health, config, OpenAPI, generated browser API client, dashboard, events, runs, jobs, action status, action stop, context, platform radar, and eval baseline endpoints.
-
-## Verification
-
-Before claiming completion, run:
+## Required Verification
 
 ```powershell
 npm.cmd run typecheck
 npm.cmd run test
 npm.cmd run test:e2e
-```
-
-Then run the bad-smell audit:
-
-```powershell
 npm.cmd run audit:smells
 ```
-
-Only intentional model names or provider URL paths may remain from these scans.

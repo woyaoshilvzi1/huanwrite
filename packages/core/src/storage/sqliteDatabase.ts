@@ -31,6 +31,7 @@ export class HuanwriteDatabase {
         target_platform TEXT NOT NULL,
         target_length TEXT NOT NULL,
         risk_note TEXT NOT NULL,
+        lane_profile TEXT NOT NULL DEFAULT '{}',
         status TEXT NOT NULL,
         selection_reason TEXT NOT NULL,
         created_at TEXT NOT NULL,
@@ -74,6 +75,7 @@ export class HuanwriteDatabase {
       CREATE TABLE IF NOT EXISTS manuscript_workbench_meta (
         manuscript_id TEXT PRIMARY KEY REFERENCES manuscripts(id),
         lane_status TEXT NOT NULL,
+        lane_profile TEXT NOT NULL DEFAULT '{}',
         owner TEXT NOT NULL,
         notes TEXT NOT NULL,
         quality_gates TEXT NOT NULL,
@@ -173,6 +175,8 @@ export class HuanwriteDatabase {
     addColumnIfMissing(this.connection, "ALTER TABLE action_runs ADD COLUMN model TEXT NOT NULL DEFAULT ''");
     addColumnIfMissing(this.connection, "ALTER TABLE action_runs ADD COLUMN usage_json TEXT NOT NULL DEFAULT '{}'");
     addColumnIfMissing(this.connection, "ALTER TABLE action_runs ADD COLUMN harness_json TEXT NOT NULL DEFAULT '{}'");
+    addColumnIfMissing(this.connection, "ALTER TABLE topics ADD COLUMN lane_profile TEXT NOT NULL DEFAULT '{}'");
+    addColumnIfMissing(this.connection, "ALTER TABLE manuscript_workbench_meta ADD COLUMN lane_profile TEXT NOT NULL DEFAULT '{}'");
     this.connection.exec(`
       UPDATE action_runs
       SET prompt_registry_key = CASE action

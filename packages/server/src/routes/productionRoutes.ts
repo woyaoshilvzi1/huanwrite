@@ -4,6 +4,7 @@ import { type WorkflowService } from "@huanwrite/core";
 import {
   buildSubmissionRequestSchema,
   createManuscriptRequestSchema,
+  createTopicFromLaneRequestSchema,
   createTopicRequestSchema,
   runActionRequestSchema,
   saveManuscriptTextRequestSchema,
@@ -16,6 +17,10 @@ export function registerProductionRoutes(app: Hono, workflow: WorkflowService): 
   app.post("/api/topics", zValidator("json", createTopicRequestSchema), (context) => {
     const body = context.req.valid("json");
     return context.json(workflow.createTopic(body));
+  });
+  app.post("/api/lane-topics", zValidator("json", createTopicFromLaneRequestSchema), (context) => {
+    const body = context.req.valid("json");
+    return context.json(workflow.createTopicFromLane(body.laneId, body.topic));
   });
   app.post("/api/topics/:id/select", zValidator("json", selectTopicRequestSchema), (context) => {
     const body = context.req.valid("json");

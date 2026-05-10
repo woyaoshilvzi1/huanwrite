@@ -1,4 +1,5 @@
 export interface TopicInput {
+  laneId: string;
   title: string;
   idea: string;
   sellingPoint: string;

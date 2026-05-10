@@ -32,7 +32,12 @@ export function App() {
       <section className="layout" aria-label="工作台">
         <OverviewPanel dashboard={workbench.dashboard} runs={workbench.runs} />
         <BoardPanel dashboard={workbench.dashboard} onUpdateWorkbench={workbench.updateWorkbenchMeta} />
-        <TopicForm topic={workbench.topic} setTopic={workbench.setTopic} onSubmit={workbench.submitTopic} />
+        <TopicForm
+          topic={workbench.topic}
+          lanes={workbench.dashboard?.creativeLanes ?? []}
+          setTopic={workbench.setTopic}
+          onSubmit={workbench.submitTopic}
+        />
         <TopicPanel dashboard={workbench.dashboard} onSelect={workbench.select} onPlan={workbench.plan} />
         <ProductionPanel
           dashboard={workbench.dashboard}

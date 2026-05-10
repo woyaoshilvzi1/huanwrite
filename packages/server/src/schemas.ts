@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { manuscriptStatuses, workbenchActionIdSchema } from "@huanwrite/shared";
+import { manuscriptStatuses, topicLaneProfileSchema, workbenchActionIdSchema } from "@huanwrite/shared";
 
 export const createTopicRequestSchema = z.object({
   title: z.string().min(1),
@@ -12,6 +12,10 @@ export const createTopicRequestSchema = z.object({
   targetLength: z.string().min(1),
   riskNote: z.string().default("")
 });
+
+export const createTopicFromLaneRequestSchema = createTopicRequestSchema.extend({
+  laneId: z.string().min(1)
+}).transform(({ laneId, ...topic }) => ({ laneId, topic }));
 
 export const selectTopicRequestSchema = z.object({
   reason: z.string().min(1)
@@ -75,6 +79,7 @@ export const qualityGateRequestSchema = z.object({
 
 export const updateManuscriptWorkbenchRequestSchema = z.object({
   laneStatus: z.enum(manuscriptStatuses),
+  laneProfile: topicLaneProfileSchema.optional(),
   owner: z.string(),
   notes: z.string(),
   qualityGates: z.array(qualityGateRequestSchema)

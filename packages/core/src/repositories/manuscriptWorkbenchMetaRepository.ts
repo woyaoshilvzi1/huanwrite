@@ -25,6 +25,7 @@ export class ManuscriptWorkbenchMetaRepository {
     return this.save({
       manuscriptId: manuscript.id,
       laneStatus: manuscript.status,
+      laneProfile: undefined,
       owner: "",
       notes: "",
       qualityGates: defaultQualityGates.map((gate) => ({ ...gate })),
@@ -43,18 +44,27 @@ export class ManuscriptWorkbenchMetaRepository {
       .prepare(
         `
         INSERT INTO manuscript_workbench_meta (
-          manuscript_id, lane_status, owner, notes, quality_gates, updated_at
+          manuscript_id, lane_status, lane_profile, owner, notes, quality_gates, updated_at
         )
-        VALUES (?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(manuscript_id) DO UPDATE SET
           lane_status = excluded.lane_status,
+          lane_profile = excluded.lane_profile,
           owner = excluded.owner,
           notes = excluded.notes,
           quality_gates = excluded.quality_gates,
           updated_at = excluded.updated_at
         `
       )
-      .run(meta.manuscriptId, meta.laneStatus, meta.owner, meta.notes, JSON.stringify(meta.qualityGates), meta.updatedAt);
+      .run(
+        meta.manuscriptId,
+        meta.laneStatus,
+        JSON.stringify(meta.laneProfile ?? {}),
+        meta.owner,
+        meta.notes,
+        JSON.stringify(meta.qualityGates),
+        meta.updatedAt
+      );
     return meta;
   }
 }
@@ -63,11 +73,18 @@ function rowToMeta(row: Record<string, unknown>): unknown {
   return {
     manuscriptId: readText(row, "manuscript_id"),
     laneStatus: readManuscriptStatus(row),
+    laneProfile: readLaneProfile(row),
     owner: readText(row, "owner"),
     notes: readText(row, "notes"),
     qualityGates: JSON.parse(readText(row, "quality_gates")),
     updatedAt: readText(row, "updated_at")
   };
+}
+
+function readLaneProfile(row: Record<string, unknown>): unknown {
+  const raw = readText(row, "lane_profile");
+  if (!raw || raw === "{}") return undefined;
+  return JSON.parse(raw);
 }
 
 function readManuscriptStatus(row: Record<string, unknown>): string {

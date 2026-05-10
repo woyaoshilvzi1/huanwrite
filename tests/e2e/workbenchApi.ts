@@ -2,6 +2,17 @@ import { expect, type Page } from "@playwright/test";
 import { z } from "zod";
 
 const dashboardPayloadSchema = z.object({
+  creativeLanes: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      targetPlatform: z.string(),
+      targetLength: z.string(),
+      creationFocus: z.array(z.string()),
+      radarSignals: z.array(z.string()),
+      qualityGates: z.array(z.string())
+    })
+  ),
   manuscripts: z.array(
     z.object({
       id: z.string(),
@@ -11,6 +22,16 @@ const dashboardPayloadSchema = z.object({
         owner: z.string(),
         notes: z.string(),
         laneStatus: z.string(),
+        laneProfile: z
+          .object({
+            laneId: z.string(),
+            laneTitle: z.string(),
+            track: z.string(),
+            creationFocus: z.array(z.string()),
+            radarSignals: z.array(z.string()),
+            qualityGates: z.array(z.string())
+          })
+          .optional(),
         qualityGates: z.array(
           z.object({
             id: z.string(),
@@ -23,7 +44,19 @@ const dashboardPayloadSchema = z.object({
       })
     })
   ),
-  topics: z.array(z.object({ id: z.string(), title: z.string() })),
+  topics: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      laneProfile: z
+        .object({
+          laneId: z.string(),
+          laneTitle: z.string(),
+          creationFocus: z.array(z.string())
+        })
+        .optional()
+    })
+  ),
   plans: z.array(
     z.object({
       id: z.string(),
@@ -47,7 +80,8 @@ const dashboardPayloadSchema = z.object({
         })
       ),
       bannedPhrases: z.array(z.string()),
-      fatigueWords: z.array(z.string())
+      fatigueWords: z.array(z.string()),
+      styleRules: z.array(z.string())
     })
   ),
   planDetails: z.array(z.object({ planId: z.string(), craftCards: z.array(z.string()) })),
@@ -76,7 +110,18 @@ const contextPayloadSchema = z.object({
 const radarPayloadSchema = z.object({
   unknowns: z.array(z.unknown()),
   evidence: z.array(z.object({ source: z.string(), summary: z.string(), score: z.number(), usable: z.boolean() })),
-  laneMatches: z.array(z.object({ manuscriptId: z.string(), title: z.string(), targetPlatform: z.string(), readiness: z.number(), nextAction: z.string() }))
+  laneMatches: z.array(
+    z.object({
+      manuscriptId: z.string(),
+      title: z.string(),
+      laneTitle: z.string(),
+      track: z.string(),
+      radarSignals: z.array(z.string()),
+      targetPlatform: z.string(),
+      readiness: z.number(),
+      nextAction: z.string()
+    })
+  )
 });
 
 const jobPayloadSchema = z.object({

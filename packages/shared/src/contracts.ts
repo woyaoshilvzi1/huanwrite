@@ -7,6 +7,7 @@ import {
   submissionStatuses,
   topicStatuses
 } from "./status.js";
+import { topicLaneProfileSchema } from "./laneContract.js";
 
 export const topicSchema = z.object({
   id: z.string(),
@@ -19,6 +20,7 @@ export const topicSchema = z.object({
   targetPlatform: z.string().min(1),
   targetLength: z.string().min(1),
   riskNote: z.string().default(""),
+  laneProfile: topicLaneProfileSchema.optional(),
   status: z.enum(topicStatuses),
   selectionReason: z.string().default(""),
   createdAt: z.string(),
@@ -87,6 +89,7 @@ export const qualityGateSchema = z.object({
 export const manuscriptWorkbenchMetaSchema = z.object({
   manuscriptId: z.string(),
   laneStatus: z.enum(manuscriptStatuses),
+  laneProfile: topicLaneProfileSchema.optional(),
   owner: z.string(),
   notes: z.string(),
   qualityGates: z.array(qualityGateSchema),

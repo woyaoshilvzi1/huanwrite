@@ -39,6 +39,9 @@ export function PlatformPanel({ snapshot }: { snapshot: PlatformRadarSnapshot | 
           {(snapshot?.laneMatches ?? []).map((item) => (
             <article className="lane-item" key={item.manuscriptId}>
               <strong>{item.title}</strong>
+              <p>稿线：{item.laneTitle}</p>
+              <p>方向：{item.track}</p>
+              <p>雷达信号：{item.radarSignals.join(" / ") || "未记录"}</p>
               <p>平台：{item.targetPlatform}</p>
               <p>准备度：{item.readiness}% · {item.nextAction}</p>
             </article>

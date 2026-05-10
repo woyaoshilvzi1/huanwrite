@@ -44,6 +44,19 @@ export function WorkbenchMetaEditor({
           onChange={(event) => setMeta({ ...meta, notes: event.target.value })}
         />
       </label>
+      {meta.laneProfile ? (
+        <section className="lane-brief" aria-label={`稿线要求 ${manuscript.title}`}>
+          <strong>{meta.laneProfile.laneTitle}</strong>
+          <p>{meta.laneProfile.track}</p>
+          <p>{meta.laneProfile.audience}</p>
+          <p>雷达信号：{meta.laneProfile.radarSignals.join(" / ")}</p>
+          <ul>
+            {meta.laneProfile.creationFocus.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       <div className="gate-grid">
         {meta.qualityGates.map((gate) => (
           <fieldset key={gate.id} className="gate-item" aria-label={`质量门 ${gate.label} ${manuscript.id}`}>

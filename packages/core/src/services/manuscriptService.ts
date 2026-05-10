@@ -22,7 +22,29 @@ export class ManuscriptService {
     };
     this.store.manuscripts.writeText(manuscript, "");
     const saved = this.store.manuscripts.save(manuscript);
-    this.store.manuscriptMeta.getOrCreate(saved);
+    const topic = this.store.topics.get(topicId);
+    const meta = this.store.manuscriptMeta.getOrCreate(saved);
+    if (topic.laneProfile) {
+      this.store.manuscriptMeta.save({
+        ...meta,
+        laneProfile: topic.laneProfile,
+        owner: topic.laneProfile.defaultOwner,
+        notes: [
+          `稿线：${topic.laneProfile.laneTitle}`,
+          `方向：${topic.laneProfile.track}`,
+          `受众：${topic.laneProfile.audience}`,
+          `雷达信号：${topic.laneProfile.radarSignals.join(" / ")}`
+        ].join("\n"),
+        qualityGates: topic.laneProfile.qualityGates.map((label, index) => ({
+          id: `lane-gate-${index + 1}`,
+          label,
+          passed: false,
+          owner: topic.laneProfile?.defaultOwner ?? "",
+          note: ""
+        })),
+        updatedAt: timestamp
+      });
+    }
     return saved;
   }
 

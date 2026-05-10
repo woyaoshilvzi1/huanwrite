@@ -1,4 +1,4 @@
-import { type Candidate, type Manuscript, type Plan, type Review, type SubmissionPackage, type Topic } from "@huanwrite/shared";
+import { type Candidate, type CreativeLane, type Manuscript, type Plan, type Review, type SubmissionPackage, type Topic } from "@huanwrite/shared";
 import { AssetCatalog } from "../assets/assetCatalog.js";
 import { FileProjectStore } from "../repositories/projectStore.js";
 import { CandidateService } from "../services/candidateService.js";
@@ -37,7 +37,7 @@ export class WorkflowService {
     this.store = store;
     this.events = new WorkflowEvents();
     const assets = new AssetCatalog(store.root);
-    this.topics = new TopicService(store);
+    this.topics = new TopicService(store, assets);
     this.plans = new PlanService(store, assets);
     this.manuscripts = new ManuscriptService(store);
     this.candidates = new CandidateService(store, assets);
@@ -54,6 +54,14 @@ export class WorkflowService {
 
   createTopic(input: TopicInput): Topic {
     return this.topics.create(input);
+  }
+
+  createTopicFromLane(laneId: string, input: TopicInput): Topic {
+    return this.topics.createFromLane(laneId, input);
+  }
+
+  creativeLanes(): CreativeLane[] {
+    return new AssetCatalog(this.store.root).creativeLanes.list();
   }
 
   selectTopic(topicId: string, reason: string): Topic {

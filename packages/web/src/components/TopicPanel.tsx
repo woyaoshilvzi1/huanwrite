@@ -35,6 +35,11 @@ function TopicList({
           <div>
             <strong>{item.title}</strong>
             <p>状态：{item.status}</p>
+            {item.laneProfile ? (
+              <p>
+                稿线：{item.laneProfile.laneTitle} · {item.laneProfile.track}
+              </p>
+            ) : null}
             <p>下一步：{item.nextAction}</p>
           </div>
           <div className="actions">

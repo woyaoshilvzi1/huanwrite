@@ -36,6 +36,7 @@ export class PlanService {
 
   complete(planId: string): Plan {
     const plan = this.store.plans.get(planId);
+    const topic = this.store.topics.get(plan.topicId);
     const defaults = this.assets.defaultPlan.read();
     const timestamp = nowIso();
     this.store.planDetails.save({
@@ -49,7 +50,7 @@ export class PlanService {
       ...plan,
       relationships: plan.relationships.length ? plan.relationships : defaults.relationships,
       structureCards: plan.structureCards.length ? plan.structureCards : defaults.structureCards,
-      styleRules: plan.styleRules.length ? plan.styleRules : defaults.styleRules,
+      styleRules: plan.styleRules.length ? plan.styleRules : withLaneFocus(defaults.styleRules, topic.laneProfile?.creationFocus ?? []),
       bannedPhrases: plan.bannedPhrases.length ? plan.bannedPhrases : defaults.bannedPhrases,
       fatigueWords: plan.fatigueWords.length ? plan.fatigueWords : defaults.fatigueWords,
       status: "ready-for-review",
@@ -104,6 +105,11 @@ export class PlanService {
     }
     return nextPlan;
   }
+}
+
+function withLaneFocus(values: string[], creationFocus: string[]): string[] {
+  if (!creationFocus.length) return values;
+  return [...values, ...creationFocus.map((item) => `稿线要求：${item}`)];
 }
 
 export interface PlanUpdateInput extends Omit<Plan, "id" | "topicId" | "manuscriptId" | "status" | "confirmedAt" | "createdAt" | "updatedAt"> {

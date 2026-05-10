@@ -58,6 +58,9 @@ export interface PlatformRadarSnapshot {
   laneMatches: Array<{
     manuscriptId: string;
     title: string;
+    laneTitle: string;
+    track: string;
+    radarSignals: string[];
     targetPlatform: string;
     readiness: number;
     nextAction: string;

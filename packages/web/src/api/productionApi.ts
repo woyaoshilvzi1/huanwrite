@@ -4,7 +4,12 @@ import { jsonPost, request } from "./request.js";
 import { type PlanUpdatePayload } from "./types.js";
 
 export async function createTopic(input: TopicInput): Promise<void> {
-  await request("/api/topics", jsonPost(input));
+  const { laneId, ...topic } = input;
+  if (laneId) {
+    await request("/api/lane-topics", jsonPost({ ...topic, laneId }));
+    return;
+  }
+  await request("/api/topics", jsonPost(topic));
 }
 
 export async function selectTopic(topicId: string, reason: string): Promise<void> {

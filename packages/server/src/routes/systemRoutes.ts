@@ -23,6 +23,7 @@ export function registerSystemRoutes(app: Hono, workflow: WorkflowService): void
     }
   });
   app.get("/api/contract", (context) => context.json(readWorkbenchContract()));
+  app.get("/api/creative-lanes", (context) => context.json({ lanes: workflow.creativeLanes() }));
   app.get("/api/openapi.json", (context) => context.json(openApiDocument()));
   app.get("/assets/api-client.js", (context) =>
     context.text(browserApiClient(), 200, { "content-type": "application/javascript; charset=utf-8" })

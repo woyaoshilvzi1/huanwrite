@@ -1,13 +1,42 @@
 import { z } from "zod";
 
 export const dashboardSchema = z.object({
+  creativeLanes: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      laneType: z.string(),
+      track: z.string(),
+      targetPlatform: z.string(),
+      targetLength: z.string(),
+      audience: z.string(),
+      creationFocus: z.array(z.string()),
+      radarSignals: z.array(z.string()),
+      qualityGates: z.array(z.string()),
+      defaultOwner: z.string(),
+      notes: z.string()
+    })
+  ),
   topics: z.array(
     z.object({
       id: z.string(),
       title: z.string(),
       status: z.string(),
       nextAction: z.string(),
-      selectionReason: z.string().optional()
+      selectionReason: z.string().optional(),
+      laneProfile: z
+        .object({
+          laneId: z.string(),
+          laneTitle: z.string(),
+          laneType: z.string(),
+          track: z.string(),
+          audience: z.string(),
+          creationFocus: z.array(z.string()),
+          radarSignals: z.array(z.string()),
+          qualityGates: z.array(z.string()),
+          defaultOwner: z.string()
+        })
+        .optional()
     })
   ),
   plans: z.array(
@@ -66,6 +95,19 @@ export const dashboardSchema = z.object({
       workbench: z.object({
         manuscriptId: z.string(),
         laneStatus: z.string(),
+        laneProfile: z
+          .object({
+            laneId: z.string(),
+            laneTitle: z.string(),
+            laneType: z.string(),
+            track: z.string(),
+            audience: z.string(),
+            creationFocus: z.array(z.string()),
+            radarSignals: z.array(z.string()),
+            qualityGates: z.array(z.string()),
+            defaultOwner: z.string()
+          })
+          .optional(),
         owner: z.string(),
         notes: z.string(),
         qualityGates: z.array(

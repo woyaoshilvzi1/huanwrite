@@ -11,9 +11,9 @@ export class TopicRepository {
         `
         INSERT INTO topics (
           id, title, idea, selling_point, protagonist_pressure, main_conflict, reader_payoff,
-          target_platform, target_length, risk_note, status, selection_reason, created_at, updated_at
+          target_platform, target_length, risk_note, lane_profile, status, selection_reason, created_at, updated_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           title = excluded.title,
           idea = excluded.idea,
@@ -24,6 +24,7 @@ export class TopicRepository {
           target_platform = excluded.target_platform,
           target_length = excluded.target_length,
           risk_note = excluded.risk_note,
+          lane_profile = excluded.lane_profile,
           status = excluded.status,
           selection_reason = excluded.selection_reason,
           updated_at = excluded.updated_at
@@ -40,6 +41,7 @@ export class TopicRepository {
         topic.targetPlatform,
         topic.targetLength,
         topic.riskNote,
+        JSON.stringify(topic.laneProfile ?? {}),
         topic.status,
         topic.selectionReason,
         topic.createdAt,
@@ -74,9 +76,16 @@ function rowToTopic(row: Record<string, unknown>): unknown {
     targetPlatform: readText(row, "target_platform"),
     targetLength: readText(row, "target_length"),
     riskNote: readText(row, "risk_note"),
+    laneProfile: readLaneProfile(row),
     status: readText(row, "status"),
     selectionReason: readText(row, "selection_reason"),
     createdAt: readText(row, "created_at"),
     updatedAt: readText(row, "updated_at")
   };
+}
+
+function readLaneProfile(row: Record<string, unknown>): unknown {
+  const raw = readText(row, "lane_profile");
+  if (!raw || raw === "{}") return undefined;
+  return JSON.parse(raw);
 }

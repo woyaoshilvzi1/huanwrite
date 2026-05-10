@@ -53,3 +53,25 @@ button:disabled {
   background: #eef1f5;
   cursor: not-allowed;
 }
+
+.lane-brief {
+  margin: 8px 0 14px;
+  border: 1px solid #d8e0e8;
+  border-radius: 6px;
+  padding: 12px;
+  background: #f7f9fb;
+}
+
+.lane-brief strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.lane-brief p,
+.lane-brief ul {
+  margin: 6px 0 0;
+}
+
+.lane-brief ul {
+  padding-left: 18px;
+}

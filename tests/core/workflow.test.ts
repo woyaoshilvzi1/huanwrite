@@ -27,6 +27,30 @@ describe("workflow", () => {
     expect(plan.status).toBe("draft");
   });
 
+  it("uses creative lane requirements as production facts", () => {
+    const topic = workflow.createTopicFromLane("fanqie-urban-marriage", {
+      title: "离婚冷静期第30天，我把前夫送上热搜",
+      idea: "女主把婚内财产证据和舆论反击绑定在同一天爆发。",
+      sellingPoint: "婚恋清算和热搜反打",
+      protagonistPressure: "财产转移、亲友围攻和网络误解同时压来",
+      mainConflict: "女主要守住财产和名誉，前夫要让她背锅",
+      readerPayoff: "证据链公开、舆论翻盘、利益清算",
+      targetPlatform: "会被稿线覆盖",
+      targetLength: "会被稿线覆盖"
+    });
+    expect(topic.targetPlatform).toBe("番茄短故事");
+    expect(topic.laneProfile?.laneId).toBe("fanqie-urban-marriage");
+
+    workflow.selectTopic(topic.id, "雷达信号命中婚恋和热搜");
+    const plan = workflow.completePlan(workflow.createPlan(topic.id).id);
+    expect(plan.styleRules).toContain("稿线要求：婚恋关系要有明确损失账本");
+
+    const manuscript = workflow.createManuscript(topic.id, plan.id, topic.title);
+    const saved = workflow.dashboard().manuscripts.find((item) => item.id === manuscript.id);
+    expect(saved?.workbench.laneProfile?.laneId).toBe("fanqie-urban-marriage");
+    expect(saved?.workbench.qualityGates.map((gate) => gate.label)).toContain("冲突绑定钱/身份/资源/关系/舆论");
+  });
+
   it("requires confirmed plan before candidate generation", () => {
     const topic = workflow.selectTopic(createTopic().id, "卖点清晰");
     const plan = workflow.createPlan(topic.id);
