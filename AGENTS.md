@@ -10,6 +10,7 @@ This file is the project map and operating law. Keep detailed engineering, testi
 
 - `docs/user-preferences.md`: owner-facing preferences and unacceptable behaviors.
 - `docs/core.md`: product purpose, architecture, and source-of-truth map.
+- `docs/ui-target.md`: owner-approved workbench UI target and migration notes.
 - `docs/engineering-rules.md`: maintainability audit rules.
 - `docs/testing-rules.md`: real-test standards and verification commands.
 - `spec/README.md`: current product and engineering specifications.
