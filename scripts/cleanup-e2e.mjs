@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 
-const ports = ["4727", "5273"];
+const ports = ["4627", "5173", "4727", "5273"];
 
 for (const port of ports) {
   const output = run("powershell.exe", [
