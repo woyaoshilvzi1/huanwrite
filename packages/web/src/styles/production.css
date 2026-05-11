@@ -8,6 +8,194 @@
   background: #ffffff;
 }
 
+.production-surface {
+  display: grid;
+  gap: 12px;
+}
+
+.surface-note {
+  margin: -4px 0 4px;
+  color: var(--muted);
+}
+
+.planning-workbench,
+.writing-workbench {
+  display: grid;
+  gap: 12px;
+  align-items: start;
+}
+
+.planning-workbench {
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+
+.writing-workbench {
+  grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.planning-index,
+.writing-index,
+.chapter-outline,
+.planning-sidecar,
+.writing-sidecar,
+.production-feed,
+.writer-action-box {
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.planning-index,
+.writing-index {
+  position: sticky;
+  top: 82px;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.planning-index h3,
+.writing-index h3,
+.chapter-outline h4,
+.planning-sidecar h4,
+.writer-action-box h4 {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: 15px;
+}
+
+.planning-index a,
+.writing-index a,
+.chapter-outline a {
+  display: grid;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  padding: 10px;
+  color: inherit;
+  text-decoration: none;
+  background: #ffffff;
+}
+
+.planning-index a:hover,
+.writing-index a:hover,
+.chapter-outline a:hover {
+  border-color: #bfd6cb;
+  background: #f2f8f5;
+}
+
+.planning-index span,
+.writing-index span,
+.planning-index small,
+.writing-index small,
+.chapter-outline small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.planning-card,
+.writing-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.planning-card-header,
+.writing-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--soft-line);
+  padding-bottom: 10px;
+}
+
+.planning-card-header strong,
+.writing-card-header strong {
+  display: block;
+  color: #20252c;
+  font-size: 18px;
+}
+
+.planning-card-header p,
+.writing-card-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.planning-card-header > span,
+.writing-card-header > span {
+  flex: 0 0 auto;
+  border: 1px solid #cfded7;
+  border-radius: 999px;
+  padding: 5px 10px;
+  color: var(--green);
+  background: #f0f8f4;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.planning-card-grid {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 220px;
+  gap: 12px;
+  align-items: start;
+}
+
+.writing-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 12px;
+  align-items: start;
+}
+
+.writing-production-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 12px;
+  align-items: start;
+}
+
+.chapter-outline,
+.planning-sidecar,
+.writing-sidecar,
+.production-feed,
+.writer-action-box {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+.chapter-outline a span {
+  color: var(--gold);
+  font-weight: 800;
+}
+
+.planning-sidecar section,
+.writer-action-box {
+  display: grid;
+  gap: 8px;
+}
+
+.planning-sidecar p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.vertical-actions {
+  display: grid;
+}
+
+.draft-editor textarea {
+  min-height: 520px;
+  line-height: 1.8;
+  background: #fffefa;
+}
+
 .gate-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -40,6 +228,8 @@
 .structure-card-list {
   display: grid;
   gap: 10px;
+  max-height: 560px;
+  overflow: auto;
 }
 
 .structure-card-editor {
@@ -61,4 +251,23 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+@media (max-width: 1200px) {
+  .planning-card-grid,
+  .writing-card-grid,
+  .writing-production-grid,
+  .planning-workbench,
+  .writing-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  .planning-index,
+  .writing-index {
+    position: static;
+  }
+
+  .draft-editor textarea {
+    min-height: 360px;
+  }
 }

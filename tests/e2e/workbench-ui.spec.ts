@@ -20,25 +20,30 @@ const jobsPayloadSchema = z.object({
 test("React workbench supports the full production flow", async ({ page }) => {
   const title = `E2E 全链路 ${Date.now()}`;
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Huanwrite 工作台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Huanwrite" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "多稿线看板" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "生产链路" })).toBeVisible();
-  await expect(page.getByText("不可推断项")).toBeVisible();
   await expectApiSurface(page);
 
   await createNovelFromUi(page, title);
   await expectLaneDrivenTopic(page, title);
+  await openView(page, "规划");
   await editPlanningAndWorkbenchMeta(page, title);
+  await openView(page, "写稿");
   await runProductionChain(page, title);
   const dashboard = await readDashboard(page);
   const manuscript = findManuscriptByTopicTitle(dashboard.manuscripts, title);
   await expectEmptyOverwriteBlocked(page, manuscript.id);
+  await openView(page, "输出");
   await verifyExplicitActionTarget(page, title);
   await runAllWorkbenchActions(page);
+  await openView(page, "看板");
   await expectCharts(page);
+  await openView(page, "平台雷达");
+  await expect(page.getByText("不可推断项")).toBeVisible();
   await expect(page.getByLabel("平台证据")).toContainText("当前工作台投稿包");
   await expect(page.getByLabel("稿线匹配")).toContainText(title);
   await expect(page.getByLabel("稿线匹配")).toContainText("都市婚恋清算");
+  await openView(page, "规划");
   await expectPlanningActions(page, title);
 });
 
@@ -99,6 +104,7 @@ async function editPlanningAndWorkbenchMeta(page: Page, title: string): Promise<
   await planItem.getByRole("button", { name: "创建正文" }).click();
   await expectNotice(page, "正文工程已创建");
 
+  await openView(page, "写稿");
   const manuscript = findManuscriptByTopicTitle((await readDashboard(page)).manuscripts, title);
   const manuscriptItem = page.getByLabel(`正文 ${manuscript.id}`);
   await manuscriptItem.getByRole("textbox", { name: `负责人 ${title} 正文`, exact: true }).fill("E2E 编辑");
@@ -109,6 +115,7 @@ async function editPlanningAndWorkbenchMeta(page: Page, title: string): Promise<
   await manuscriptItem.getByRole("button", { name: "保存看板信息" }).click();
   await expectNotice(page, "看板信息已保存");
 
+  await openView(page, "看板");
   await page.getByLabel("看板搜索").fill(title);
   await expect(page.getByLabel("状态列 empty").filter({ hasText: title })).toBeVisible();
   await page.getByLabel(`稿线卡片 ${title} 正文`).dragTo(page.getByLabel("状态列 drafting"));
@@ -159,6 +166,10 @@ async function runProductionChain(page: Page, title: string): Promise<void> {
   await expectNotice(page, "候选已合并");
   await manuscriptItem.getByRole("button", { name: "生成投稿包" }).click();
   await expectNotice(page, "投稿包已生成");
+}
+
+async function openView(page: Page, label: string): Promise<void> {
+  await page.getByRole("button", { name: label, exact: true }).click();
 }
 
 async function runAllWorkbenchActions(page: Page): Promise<void> {

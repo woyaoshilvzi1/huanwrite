@@ -8,11 +8,11 @@
   --muted: #68707d;
   --line: #dfe3ea;
   --soft-line: #eef1f5;
-  --paper: #fffdf8;
+  --paper: #f6f8f5;
   --panel: #ffffff;
   --field: #f8fafc;
-  --accent: #315f72;
-  --accent-strong: #234a59;
+  --accent: #145f50;
+  --accent-strong: #0d473c;
   --gold: #b88746;
   --green: #2f6f55;
   --red: #a64040;
@@ -20,9 +20,7 @@
 
 body {
   margin: 0;
-  background:
-    linear-gradient(180deg, #f5f1e8 0, #f7f8fb 260px),
-    #f7f8fb;
+  background: var(--paper);
   color: var(--ink);
   font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
 }

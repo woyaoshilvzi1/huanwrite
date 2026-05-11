@@ -10,7 +10,7 @@ export function ManuscriptEditor({
 }) {
   const [text, setText] = useState("");
   return (
-    <label>
+    <label className="draft-editor">
       <span>正文内容</span>
       <textarea
         aria-label={`正文内容 ${manuscript.title}`}

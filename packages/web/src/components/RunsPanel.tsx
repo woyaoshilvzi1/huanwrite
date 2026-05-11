@@ -16,16 +16,22 @@ export function RunsPanel({
   onStopJob: (jobId: string) => Promise<void>;
 }) {
   return (
-    <section className="panel wide" aria-labelledby="runs-heading">
-      <h2 id="runs-heading">输出与任务</h2>
-      <div className="two-column">
+    <section className="panel wide runs-workbench" aria-labelledby="runs-heading">
+      <header className="workspace-heading">
+        <div>
+          <h2 id="runs-heading">输出与任务</h2>
+          <p>动作运行记录、后台任务、模型观测和输出正文。</p>
+        </div>
+        <strong>{jobs.length} 个任务</strong>
+      </header>
+      <div className="runs-layout">
         <RunList title="运行记录" items={runs} selectedRunId={selectedRunId} onSelectRun={onSelectRun} />
         <JobList items={jobs} onStopJob={onStopJob} />
+        <section className="run-output-viewer" aria-label="运行输出正文">
+          <h3>运行输出正文</h3>
+          <pre>{runOutput || "选择一条运行记录查看输出正文。"}</pre>
+        </section>
       </div>
-      <section className="run-output-viewer" aria-label="运行输出正文">
-        <h3>运行输出正文</h3>
-        <pre>{runOutput || "选择一条运行记录查看输出正文。"}</pre>
-      </section>
     </section>
   );
 }

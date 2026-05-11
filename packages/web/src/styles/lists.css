@@ -9,9 +9,9 @@
 .topic-list li,
 .lane-item,
 .action-card {
-  border: 1px solid var(--soft-line);
-  border-radius: 8px;
-  background: #fbfcfe;
+  border: 1px solid #d7dfd9;
+  border-radius: 7px;
+  background: #ffffff;
 }
 
 .topic-list li {
@@ -66,7 +66,12 @@
 .lane-item {
   display: grid;
   gap: 8px;
-  padding: 13px;
+  padding: 12px;
+  border-left: 4px solid #d7dfd9;
+}
+
+.draggable-lane {
+  border-left-color: var(--green);
 }
 
 @media (max-width: 980px) {

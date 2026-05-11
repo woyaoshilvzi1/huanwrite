@@ -2,18 +2,18 @@
 .board-filters,
 .status-board {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .metrics {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(130px, 1fr));
 }
 
 .metric {
-  border: 1px solid var(--soft-line);
-  border-radius: 8px;
-  padding: 14px;
-  background: linear-gradient(180deg, #fffdf8, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 12px;
+  background: #ffffff;
 }
 
 .metric span {
@@ -25,17 +25,17 @@
 
 .metric strong {
   display: block;
-  margin-top: 8px;
+  margin-top: 4px;
   color: #1d242c;
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .board-filters {
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: minmax(0, 1fr) 220px;
 }
 
 .status-board {
-  grid-template-columns: repeat(6, minmax(190px, 1fr));
+  grid-template-columns: repeat(6, minmax(240px, 1fr));
   overflow-x: auto;
   align-items: start;
 }
@@ -43,11 +43,11 @@
 .status-column {
   display: grid;
   gap: 10px;
-  min-height: 180px;
-  border: 1px solid var(--soft-line);
-  border-radius: 8px;
+  min-height: 260px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
   padding: 12px;
-  background: #fbfcfe;
+  background: #fbfdfb;
 }
 
 .status-column h3 {

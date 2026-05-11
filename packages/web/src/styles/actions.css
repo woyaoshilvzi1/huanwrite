@@ -1,7 +1,10 @@
 .action-grid,
 .two-column,
 .radar-grid,
-.reference-grid {
+.reference-grid,
+.radar-layout,
+.reference-layout,
+.runs-layout {
   display: grid;
   gap: 12px;
 }
@@ -36,10 +39,38 @@
   font-size: 12px;
 }
 
-.run-output-viewer {
+.workspace-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--soft-line);
+  padding-bottom: 12px;
+}
+
+.workspace-heading h2 {
+  margin: 0 0 4px;
+}
+
+.workspace-heading p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.workspace-heading > strong {
+  border: 1px solid #cfded7;
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: var(--green);
+  background: #f0f8f4;
+}
+
+.run-output-viewer,
+.radar-evidence,
+.radar-match,
+.reference-reader {
   display: grid;
   gap: 10px;
-  margin-top: 14px;
 }
 
 .run-output-viewer pre {
@@ -60,11 +91,95 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.radar-layout {
+  grid-template-columns: 280px minmax(0, 1fr) 360px;
+  align-items: start;
+}
+
+.radar-summary,
+.reference-index {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfcfe;
+}
+
+.radar-summary article {
+  border-bottom: 1px solid var(--soft-line);
+  padding-bottom: 10px;
+}
+
+.radar-summary article:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.radar-summary strong,
+.reference-index strong {
+  display: block;
+  color: var(--accent-strong);
+}
+
+.radar-summary p,
+.reference-index small {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.reference-layout {
+  grid-template-columns: 300px minmax(0, 1fr);
+  align-items: start;
+}
+
+.reference-index {
+  position: sticky;
+  top: 82px;
+}
+
+.reference-index a {
+  border: 1px solid transparent;
+  border-radius: 7px;
+  padding: 10px;
+  color: inherit;
+  text-decoration: none;
+  background: #ffffff;
+}
+
+.reference-index a:hover {
+  border-color: #bfd6cb;
+  background: #f2f8f5;
+}
+
+.reference-reader pre {
+  max-height: 360px;
+  overflow: auto;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  white-space: pre-wrap;
+  line-height: 1.65;
+}
+
+.runs-layout {
+  grid-template-columns: 320px 320px minmax(0, 1fr);
+  align-items: start;
+}
+
 @media (max-width: 980px) {
   .action-grid,
   .two-column,
   .radar-grid,
-  .reference-grid {
+  .reference-grid,
+  .radar-layout,
+  .reference-layout,
+  .runs-layout {
     grid-template-columns: 1fr;
+  }
+
+  .reference-index {
+    position: static;
   }
 }

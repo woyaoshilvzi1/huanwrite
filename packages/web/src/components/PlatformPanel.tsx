@@ -2,29 +2,34 @@ import { type PlatformRadarSnapshot } from "../api.js";
 
 export function PlatformPanel({ snapshot }: { snapshot: PlatformRadarSnapshot | null }) {
   return (
-    <section className="panel wide" aria-labelledby="platform-heading">
-      <h2 id="platform-heading">平台雷达</h2>
-      <div className="radar-grid">
-        <article className="lane-item">
-          <strong>今日结论</strong>
-          <p>{snapshot?.conclusion ?? "加载中"}</p>
-          <p>证据评分：{snapshot?.evidenceScore ?? 0}</p>
-        </article>
-        <article className="lane-item">
-          <strong>不可推断项</strong>
-          <p>{snapshot?.unknowns.join(" / ") ?? "加载中"}</p>
-        </article>
-        <article className="lane-item">
-          <strong>噪音词降权</strong>
-          <p>{snapshot?.noiseDownranking.join(" / ") ?? "加载中"}</p>
-        </article>
-        <article className="lane-item">
-          <strong>行动建议</strong>
-          <p>{snapshot?.recommendations.join(" / ") ?? "加载中"}</p>
-        </article>
-      </div>
-      <div className="radar-grid">
-        <section className="lane" aria-label="平台证据">
+    <section className="panel wide radar-workbench" aria-labelledby="platform-heading">
+      <header className="workspace-heading">
+        <div>
+          <h2 id="platform-heading">平台雷达</h2>
+          <p>用公开证据判断每条稿线下一步该投、该改还是该暂停。</p>
+        </div>
+        <strong>{snapshot?.evidenceScore ?? 0} / 100</strong>
+      </header>
+      <div className="radar-layout">
+        <aside className="radar-summary" aria-label="雷达摘要">
+          <article>
+            <strong>今日结论</strong>
+            <p>{snapshot?.conclusion ?? "加载中"}</p>
+          </article>
+          <article>
+            <strong>不可推断项</strong>
+            <p>{snapshot?.unknowns.join(" / ") ?? "加载中"}</p>
+          </article>
+          <article>
+            <strong>噪音词降权</strong>
+            <p>{snapshot?.noiseDownranking.join(" / ") ?? "加载中"}</p>
+          </article>
+          <article>
+            <strong>行动建议</strong>
+            <p>{snapshot?.recommendations.join(" / ") ?? "加载中"}</p>
+          </article>
+        </aside>
+        <section className="radar-evidence" aria-label="平台证据">
           <h3>证据</h3>
           {(snapshot?.evidence ?? []).map((item) => (
             <article className="lane-item" key={item.source}>
@@ -34,7 +39,7 @@ export function PlatformPanel({ snapshot }: { snapshot: PlatformRadarSnapshot | 
             </article>
           ))}
         </section>
-        <section className="lane" aria-label="稿线匹配">
+        <section className="radar-match" aria-label="稿线匹配">
           <h3>稿线匹配</h3>
           {(snapshot?.laneMatches ?? []).map((item) => (
             <article className="lane-item" key={item.manuscriptId}>
